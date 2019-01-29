@@ -1,0 +1,26 @@
+--cpu Cortex-M3
+"electrospinning_01\startup_stm32f103xb.o"
+"electrospinning_01\main.o"
+"electrospinning_01\stm32f1xx_it.o"
+"electrospinning_01\stm32f1xx_hal_msp.o"
+"electrospinning_01\stm32f1xx_hal_delay.o"
+"electrospinning_01\stm32f1xx_hal_lcd_i2c.o"
+"electrospinning_01\stm32f1xx_hal_gpio_ex.o"
+"electrospinning_01\stm32f1xx_hal_i2c.o"
+"electrospinning_01\stm32f1xx_hal_tim.o"
+"electrospinning_01\stm32f1xx_hal_tim_ex.o"
+"electrospinning_01\stm32f1xx_hal_uart.o"
+"electrospinning_01\stm32f1xx_hal.o"
+"electrospinning_01\stm32f1xx_hal_rcc.o"
+"electrospinning_01\stm32f1xx_hal_rcc_ex.o"
+"electrospinning_01\stm32f1xx_hal_gpio.o"
+"electrospinning_01\stm32f1xx_hal_dma.o"
+"electrospinning_01\stm32f1xx_hal_cortex.o"
+"electrospinning_01\stm32f1xx_hal_pwr.o"
+"electrospinning_01\stm32f1xx_hal_flash.o"
+"electrospinning_01\stm32f1xx_hal_flash_ex.o"
+"electrospinning_01\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "Electrospinning_01\Electrospinning_01.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "Electrospinning_01.map" -o Electrospinning_01\Electrospinning_01.axf
