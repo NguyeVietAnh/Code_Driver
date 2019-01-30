@@ -44,14 +44,15 @@
 #include "stm32f1xx_hal_delay.h"
 #include "stdio.h"
 
-int varControl;
-int varEncoder;
-int varSelect;
-int varCount;
-int adcResult;
-char buffer[40];
-int i;
-
+/***********Global Variable ****************************************************/
+	int varControl;
+	static int varEncoder;
+	static int varSelect;
+	static int varCount;
+	int adcResult;
+	char buffer[40];
+	int i;
+/*******************************************************************************/
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -151,9 +152,10 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
+/************Value of Encoder*******************************/		
   varControl = TIM3 -> CNT;
-		varEncoder = TIM2 -> CNT;
-
+	varEncoder = TIM2 -> CNT;
+/***********************************************************/
  
 
     /* USER CODE BEGIN 3 */
@@ -169,13 +171,11 @@ int main(void)
 								lcd_send_string(buffer);
                 HAL_GPIO_TogglePin(PWM_GPIO_Port,PWM_Pin);
                 HAL_Delay(1);	
-								 HAL_ADC_Start(&hadc1);
-						 
-								HAL_ADC_PollForConversion(&hadc1, 100);
-						 
+								HAL_ADC_Start(&hadc1);
+							  HAL_ADC_PollForConversion(&hadc1, 100);		
 								adcResult = HAL_ADC_GetValue(&hadc1);	
 				        adcResult = adcResult;
-				 HAL_ADC_Stop(&hadc1);
+				        HAL_ADC_Stop(&hadc1);
       		break;
       	case 2:
 								lcd_goto_XY(1,0);
