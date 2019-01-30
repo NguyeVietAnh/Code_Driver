@@ -40,13 +40,15 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "main.h"
 #include "stm32f1xx_hal_lcd_i2c.h"
 #include "stm32f1xx_hal_delay.h"
 #include "stdio.h"
 
 int varControl;
 int varEncoder;
+int varSelect;
+int varCount;
+int adcResult;
 char buffer[40];
 int i;
 
@@ -71,6 +73,8 @@ int i;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
@@ -90,6 +94,7 @@ static void MX_TIM3_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -132,6 +137,7 @@ int main(void)
   MX_TIM2_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
+  MX_ADC1_Init();
 	HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_ALL);
 	HAL_TIM_Encoder_Start(&htim3,TIM_CHANNEL_ALL);
   /* USER CODE BEGIN 2 */
@@ -140,114 +146,90 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	lcd_init();
-	lcd_goto_XY(1,0);
-	lcd_send_string("Electrospinning");
-		HAL_Delay(100);
-	lcd_goto_XY(1,0);
-	HAL_Delay(100);
-	lcd_send_string(" lectrospinning");
-		lcd_goto_XY(1,0);
-	HAL_Delay(100);
-	lcd_send_string("  ectrospinning");
-		lcd_goto_XY(1,0);
-	HAL_Delay(100);
-	lcd_send_string("  ectrospinning");
-		lcd_goto_XY(1,0);
-	HAL_Delay(100);
-	lcd_send_string("   ctrospinning");
-  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("    trospinning");
-	  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("     rospinning");
-	  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("       spinning");
-	  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("        pinning");
-		  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("         inning");
-			  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("          nning");
-				  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("           ning");
-					  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("            ing");
-						  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("             ng");
-							  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("              g");
-								  lcd_goto_XY(1,0);
-		HAL_Delay(100);
-	lcd_send_string("               ");
-  lcd_goto_XY(2,0);
-	lcd_send_string("BME - Inovation");
-	HAL_Delay(500);
-
+   lcdStartDisplay();
   while (1)
   {
     /* USER CODE END WHILE */
-    varControl = TIM3 -> CNT;
+
+  varControl = TIM3 -> CNT;
 		varEncoder = TIM2 -> CNT;
+
+ 
+
     /* USER CODE BEGIN 3 */
 		switch (varControl)
       {
       	case 1:
-			lcd_goto_XY(1,0);
-			lcd_send_string("Auto Run");
-			lcd_goto_XY(2,0);
-			lcd_send_string("Speed: ");			
-      sprintf(buffer,"%d",varEncoder);
-		  lcd_goto_XY(2,8);
-		  lcd_send_string(buffer);	
+								lcd_goto_XY(1,0);
+								lcd_send_string("Auto Run          ");
+								lcd_goto_XY(2,0);
+								lcd_send_string("Speed: ");			
+								sprintf(buffer,"%d",adcResult);
+								lcd_goto_XY(2,8);
+								lcd_send_string(buffer);
+                HAL_GPIO_TogglePin(PWM_GPIO_Port,PWM_Pin);
+                HAL_Delay(1);	
+								 HAL_ADC_Start(&hadc1);
+						 
+								HAL_ADC_PollForConversion(&hadc1, 100);
+						 
+								adcResult = HAL_ADC_GetValue(&hadc1);	
+				        adcResult = adcResult;
+				 HAL_ADC_Stop(&hadc1);
       		break;
       	case 2:
-			lcd_goto_XY(1,0);
-			lcd_send_string("Manual     ");
-			lcd_goto_XY(2,0);
-			lcd_send_string("Speed: ");			
-      sprintf(buffer,"%d",varEncoder);
-		  lcd_goto_XY(2,8);
-		  lcd_send_string(buffer);	
+								lcd_goto_XY(1,0);
+								lcd_send_string("Manual Mode");
+				        if (HAL_GPIO_ReadPin(SW_GPIO_Port,SW_Pin) == 0)
+									{
+											varSelect = varSelect + 50;
+										  if (varSelect > 500) varSelect = 0;
+											sprintf(buffer,"%d",varSelect);
+											lcd_goto_XY(1,0);
+											lcd_send_string("Speed Set:          ");
+											lcd_goto_XY(1,13);
+											lcd_send_string(buffer);
+											HAL_Delay(500);
+										
+									 }	
+												
+											
+									
+								lcd_goto_XY(2,0);
+								lcd_send_string("Press to set ");			
+//								sprintf(buffer,"%d",varEncoder);
+//								lcd_goto_XY(2,8);
+//								lcd_send_string(buffer);	
       		break;
 				case 3:
-			lcd_goto_XY(1,0);
-			lcd_send_string("Fast      ");
-			lcd_goto_XY(2,0);
-			lcd_send_string("Speed: ");			
-      sprintf(buffer,"%d",varEncoder);
-		  lcd_goto_XY(2,8);
-		  lcd_send_string(buffer);	
+								lcd_goto_XY(1,0);  
+								lcd_send_string("Fast           ");
+								lcd_goto_XY(2,0);
+								lcd_send_string("Speed: ");			
+								sprintf(buffer,"%d",varEncoder);
+								lcd_goto_XY(2,8);
+								lcd_send_string(buffer);	
       		break;
 				case 4:
-			lcd_goto_XY(1,0);
-			lcd_send_string("Slow        ");
-			lcd_goto_XY(2,0);
-			lcd_send_string("Speed: ");			
-      sprintf(buffer,"%d",varEncoder);
-		  lcd_goto_XY(2,8);
-		  lcd_send_string(buffer);	
+								lcd_goto_XY(1,0);
+								lcd_send_string("Slow            ");
+								lcd_goto_XY(2,0);
+								lcd_send_string("Speed: ");			
+								sprintf(buffer,"%d",varEncoder);
+								lcd_goto_XY(2,8);
+								lcd_send_string(buffer);	
       		break;					
       	default:
-			lcd_goto_XY(1,0);
-			lcd_send_string("None            ");
-		  lcd_goto_XY(2,0);
-			lcd_send_string("                ");
+								lcd_goto_XY(1,0);
+								lcd_send_string("Please Select           ");
+								lcd_goto_XY(2,0);
+								lcd_send_string("                ");
 
           break;
   }
   /* USER CODE END 3 */
 }
-}
+	}
 
 /**
   * @brief System Clock Configuration
@@ -257,6 +239,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /**Initializes the CPU, AHB and APB busses clocks 
   */
@@ -281,6 +264,57 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+  /**Common config 
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /**Configure Regular Channel 
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -464,17 +498,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(PWM_GPIO_Port, PWM_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : LED_Pin */
-  GPIO_InitStruct.Pin = LED_Pin;
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SW_Pin */
   GPIO_InitStruct.Pin = SW_Pin;

@@ -70,3 +70,59 @@ void lcd_goto_XY (int row, int col)
 	}
 	lcd_send_cmd(pos_Addr);
 }
+void lcdStartDisplay (void)
+{
+	lcd_init();
+	lcd_goto_XY(1,0);
+	lcd_send_string("Electrospinning");
+		HAL_Delay(100);
+	lcd_goto_XY(1,0);
+	HAL_Delay(100);
+	lcd_send_string(" lectrospinning");
+		lcd_goto_XY(1,0);
+	HAL_Delay(100);
+	lcd_send_string("  ectrospinning");
+		lcd_goto_XY(1,0);
+	HAL_Delay(100);
+	lcd_send_string("  ectrospinning");
+		lcd_goto_XY(1,0);
+	HAL_Delay(100);
+	lcd_send_string("   ctrospinning");
+  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("    trospinning");
+	  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("     rospinning");
+	  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("       spinning");
+	  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("        pinning");
+		  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("         inning");
+			  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("          nning");
+				  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("           ning");
+					  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("            ing");
+						  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("             ng");
+							  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("              g");
+								  lcd_goto_XY(1,0);
+		HAL_Delay(100);
+	lcd_send_string("               ");
+  lcd_goto_XY(2,0);
+	lcd_send_string("BME - Inovation");
+	HAL_Delay(500);
+	
+}

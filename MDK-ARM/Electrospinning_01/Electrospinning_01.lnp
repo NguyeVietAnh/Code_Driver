@@ -6,6 +6,8 @@
 "electrospinning_01\stm32f1xx_hal_delay.o"
 "electrospinning_01\stm32f1xx_hal_lcd_i2c.o"
 "electrospinning_01\stm32f1xx_hal_gpio_ex.o"
+"electrospinning_01\stm32f1xx_hal_adc.o"
+"electrospinning_01\stm32f1xx_hal_adc_ex.o"
 "electrospinning_01\stm32f1xx_hal_i2c.o"
 "electrospinning_01\stm32f1xx_hal_tim.o"
 "electrospinning_01\stm32f1xx_hal_tim_ex.o"
