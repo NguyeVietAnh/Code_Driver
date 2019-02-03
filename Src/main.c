@@ -52,7 +52,9 @@
 	int adcResult;
 	char buffer[40];
 	int i;
+	void user_pwm_setvalue(uint16_t value);
 /*******************************************************************************/
+void motorRun (int timeInput);
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -103,7 +105,6 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
- uint8_t data [] = {0,1,2,3,4}; 
 /* USER CODE END 0 */
 
 /**
@@ -151,13 +152,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
-/************Value of Encoder*******************************/		
-  varControl = TIM3 -> CNT;
-	varEncoder = TIM2 -> CNT;
-/***********************************************************/
- 
-
+    varControl = TIM3 -> CNT;
+		varEncoder = TIM2 -> CNT;
     /* USER CODE BEGIN 3 */
 		switch (varControl)
       {
@@ -166,41 +162,30 @@ int main(void)
 								lcd_send_string("Auto Run          ");
 								lcd_goto_XY(2,0);
 								lcd_send_string("Speed: ");			
-								sprintf(buffer,"%d",adcResult);
+								sprintf(buffer,"%d",varEncoder);
 								lcd_goto_XY(2,8);
 								lcd_send_string(buffer);
-                HAL_GPIO_TogglePin(PWM_GPIO_Port,PWM_Pin);
-                HAL_Delay(1);	
-								HAL_ADC_Start(&hadc1);
-							  HAL_ADC_PollForConversion(&hadc1, 100);		
-								adcResult = HAL_ADC_GetValue(&hadc1);	
-				        adcResult = adcResult;
-				        HAL_ADC_Stop(&hadc1);
+				        motorRun(5);                            // Run motor with delay 5 ms
       		break;
       	case 2:
 								lcd_goto_XY(1,0);
 								lcd_send_string("Manual Mode");
 				        if (HAL_GPIO_ReadPin(SW_GPIO_Port,SW_Pin) == 0)
 									{
-											varSelect = varSelect + 50;
-										  if (varSelect > 500) varSelect = 0;
+											varSelect = varSelect + 1;
+										  if (varSelect > 100) varSelect = 0;
 											sprintf(buffer,"%d",varSelect);
 											lcd_goto_XY(1,0);
 											lcd_send_string("Speed Set:          ");
 											lcd_goto_XY(1,13);
 											lcd_send_string(buffer);
 											HAL_Delay(500);
-										
-									 }	
-												
-											
-									
+										  
+								  }																					
 								lcd_goto_XY(2,0);
-								lcd_send_string("Press to set ");			
-//								sprintf(buffer,"%d",varEncoder);
-//								lcd_goto_XY(2,8);
-//								lcd_send_string(buffer);	
-      		break;
+								lcd_send_string("Press to set ");
+								motorRun(varSelect);
+						break;
 				case 3:
 								lcd_goto_XY(1,0);  
 								lcd_send_string("Fast           ");
@@ -228,8 +213,9 @@ int main(void)
           break;
   }
   /* USER CODE END 3 */
-}
+
 	}
+}	
 
 /**
   * @brief System Clock Configuration
@@ -419,7 +405,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 7;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 4;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -501,7 +487,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(PWM_GPIO_Port, PWM_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PWM__GPIO_Port, PWM__Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
@@ -516,17 +502,34 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SW_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PWM_Pin */
-  GPIO_InitStruct.Pin = PWM_Pin;
+  /*Configure GPIO pin : PWM__Pin */
+  GPIO_InitStruct.Pin = PWM__Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(PWM_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(PWM__GPIO_Port, &GPIO_InitStruct);
 
 }
 
 /* USER CODE BEGIN 4 */
-
+void user_pwm_setvalue(uint16_t value)
+{
+    TIM_OC_InitTypeDef sConfigOC;
+  
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = value;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_3);
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);  
+}
+void motorRun (int timeInput)
+{
+	HAL_GPIO_TogglePin(PWM__GPIO_Port,PWM__Pin);
+	HAL_Delay(timeInput);
+	
+	
+}
 /* USER CODE END 4 */
 
 /**

@@ -80,8 +80,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define SW_Pin GPIO_PIN_5
 #define SW_GPIO_Port GPIOA
-#define PWM_Pin GPIO_PIN_0
-#define PWM_GPIO_Port GPIOB
+#define PWM__Pin GPIO_PIN_0
+#define PWM__GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
