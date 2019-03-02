@@ -54,8 +54,8 @@
 	static int varSelect;
 	static int varCount;
 	int adcResult;
-	char buffer[400];
-	char buffer1[400];
+	char buffer[40];
+	char buffer1[40];
 	int i;
 	void user_pwm_setvalue(uint16_t value);
   int sampleCount;
@@ -433,7 +433,7 @@ static void MX_TIM3_Init(void)
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
-  sConfig.IC1Filter = 0;
+  sConfig.IC1Filter = 15;
   sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
