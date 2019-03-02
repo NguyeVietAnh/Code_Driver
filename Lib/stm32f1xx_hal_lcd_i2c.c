@@ -124,5 +124,7 @@ void lcdStartDisplay (void)
   lcd_goto_XY(2,0);
 	lcd_send_string("BME - Inovation");
 	HAL_Delay(500);
+	lcd_goto_XY(2,0);
+	lcd_send_string("               ");
 	
 }

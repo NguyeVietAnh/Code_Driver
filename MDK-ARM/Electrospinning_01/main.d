@@ -31,3 +31,4 @@ electrospinning_01\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim
 electrospinning_01\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 electrospinning_01\main.o: ..\Lib\stm32f1xx_hal_lcd_i2c.h
 electrospinning_01\main.o: ..\Lib\stm32f1xx_hal_delay.h
+electrospinning_01\main.o: ../Inc/stm32f1xx_it.h
