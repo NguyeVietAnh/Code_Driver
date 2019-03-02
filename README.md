@@ -1,6 +1,5 @@
 # Code_Driver
-# Electrospinning - Make stuff great again ! 
-Thesis
+# Electrospinning 
  Hi every one, I am Viet Anh, this is my project about electrospinning system base on ARM STM32F103 which I use for control motor with PID and using OLED LCD to display. 
  Hope everybody can join with my project !
  
