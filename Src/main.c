@@ -59,6 +59,7 @@
 	int i;
 	void user_pwm_setvalue(uint16_t value);
   int sampleCount;
+ TIM_OC_InitTypeDef sConfigOC = {0};
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
@@ -160,6 +161,7 @@ int main(void)
 	
   while (1)
   {
+		sConfigOC.Pulse = varEncoderInput;
 		varEncoderInput = TIM3 -> CNT;
 		varEncoderMotor = TIM2 -> CNT;
 		
