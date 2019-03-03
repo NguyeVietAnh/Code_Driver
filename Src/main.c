@@ -53,13 +53,13 @@
 	int varEncoderMotor;
 	static int varSelect;
 	static int varCount;
-	int adcResult;
+	int  adcResult;
 	char buffer[40];
 	char buffer1[40];
-	int i;
+	int  i;
 	void user_pwm_setvalue(uint16_t value);
-  int sampleCount;
- TIM_OC_InitTypeDef sConfigOC = {0};
+  int  sampleCount;
+  TIM_OC_InitTypeDef sConfigOC = {0};
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
@@ -166,6 +166,7 @@ int main(void)
 		varEncoderMotor = TIM2 -> CNT;
 		
     /* USER CODE END WHILE */
+		
 		lcd_goto_XY(1,0);
 		lcd_send_string("Set Run");
     sprintf(buffer,"%d",varEncoderInput);
